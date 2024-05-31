@@ -3,7 +3,7 @@
 # Function to check for hardcoded URLs and form inputs in Cypress test files
 check_hardcoded_inputs() {
   local file=$1
-  local patterns=("cy\.(visit|get\([^)]+\).type|request|intercept)\([^)]+\)")
+  local patterns=("cy\.(visit|get\([^)]+\).type|request|intercept)\(['\"][^'\"]+['\"]\)")
 
   for pattern in "${patterns[@]}"; do
     local match=$(grep -E "$pattern" "$file")

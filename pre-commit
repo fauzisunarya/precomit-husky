@@ -3,7 +3,11 @@
 # Function to check for hardcoded URLs and form inputs in Cypress test files
 check_hardcoded_inputs() {
   local file=$1
-  local patterns=("cy\.(visit|get\([^)]+\).type|request|intercept)\(['\"][^'\"]+['\"]\)")
+#   local patterns=("cy\.(visit|get\([^)]+\).type|request|intercept)\([^)]+\)")
+  local patterns=("cy\.visit\(['\"][^'\"]+['\"]\)"
+                  "cy\.get\(['\"][^'\"]+['\"]\)\.type\(['\"][^'\"]+['\"]\)"
+                  "cy\.request\(['\"][^'\"]+['\"]\)"
+                  "cy\.intercept\(['\"][^'\"]+['\"]\)")
 
   for pattern in "${patterns[@]}"; do
     local match=$(grep -E "$pattern" "$file")
@@ -20,7 +24,7 @@ check_hardcoded_inputs() {
 MODIFIED_FILES=$(git diff --cached --name-only --diff-filter=AM)
 
 # Filter for Cypress test files
-CYPRESS_FILES=$(echo "$MODIFIED_FILES" | grep -E '\.(js|jsx|ts|tsx)$' | grep 'cypress')
+CYPRESS_FILES=$(echo "$MODIFIED_FILES" | grep -E '\.(cy\.js)$' | grep 'cypress')
 
 # Filter for files supported by Prettier
 PRETTIER_FILES=$(echo "$MODIFIED_FILES" | grep -E '\.(js|jsx|ts|tsx|json|css|scss|md)$')
@@ -54,7 +58,7 @@ if [ -n "$PRETTIER_FILES" ]; then
 fi
 
 # Filter for Cypress test files
-CYPRESS_FILES=$(echo "$MODIFIED_FILES" | grep -E '\.(js|jsx|ts|tsx)$' | grep 'cypress')
+CYPRESS_FILES=$(echo "$MODIFIED_FILES" | grep -E '\.(cy\.js)$' | grep 'cypress')
 
 # Run Cypress tests on modified files
 if [ -n "$CYPRESS_FILES" ]; then

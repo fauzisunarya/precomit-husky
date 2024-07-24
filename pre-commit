@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env sh
+# . "${0%/*}/h"
 
 # Function to check for hardcoded URLs and form inputs in Cypress test files
 check_hardcoded_inputs() {
